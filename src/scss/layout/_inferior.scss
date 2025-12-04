@@ -10,6 +10,12 @@
     }
 }
 
+ .informacion-meta {
+    span {
+        color: v.$amarillo;
+    }
+ }
+
 .entrada-blog {
     margin-bottom: 2rem;
 
@@ -48,10 +54,6 @@
             background-color: v.$verde;
             margin-top: 1rem;
         }
-    }
-
-    span {
-        color: v.$amarillo;
     }
 
 }
