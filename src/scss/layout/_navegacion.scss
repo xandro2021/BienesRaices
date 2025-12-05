@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     padding-top: 3rem;
+    align-items: center;
 
     @include m.tablet {
         flex-direction: row;
@@ -18,11 +19,16 @@
 
 
 .navegacion {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility .3s ease-in-out, opacity 0.5s linear;
 
     @include m.tablet {
         display: flex;
         align-items: center;
         gap: 2rem;
+        opacity: 1;
+        visibility: visible;
     }
 
     a {
@@ -32,4 +38,22 @@
         display: block;
         text-align: center;
     }
+}
+
+/* MENU HAMBURGUESA */
+.mobile-menu {
+    cursor: pointer;
+
+    @include m.tablet {
+        display: none;
+    }
+
+    img {
+        width: 5rem;
+    }
+}
+
+.mostrar {
+    visibility: visible;
+    opacity: 1;
 }

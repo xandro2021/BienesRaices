@@ -14,6 +14,7 @@ import cssnano from "cssnano";
 import terser from "gulp-terser";
 import rename from "gulp-rename";
 import sharp from 'sharp';
+import concat from "gulp-concat";
 
 const sass = gulpSass(dartSass);
 
@@ -34,12 +35,23 @@ export function css() {
 }
 
 // Minificar JS
+// export function js() {
+//   return src(paths.js)
+//     .pipe(terser())
+//     .pipe(rename({ suffix: ".min" }))
+//     .pipe(dest("build/js", { sourcemaps: "." }));
+// }
 export function js() {
-  return src(paths.js)
+  return src([
+      "src/js/modernizr.js",
+      "src/js/**/*.js"
+    ])
+    .pipe(concat("bundle.js"))
     .pipe(terser())
     .pipe(rename({ suffix: ".min" }))
     .pipe(dest("build/js", { sourcemaps: "." }));
 }
+
 
 function imagenesSVG() {
     return src("src/img/**/*.svg")
