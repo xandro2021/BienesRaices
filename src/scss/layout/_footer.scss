@@ -4,9 +4,18 @@
 .footer {
     padding: calc(v.$separacion/2) 0;
     background-color: v.$grisOscuro;
-    padding-top: calc(v.$separacion/2);
     margin-bottom: 0px;
     margin-top: 5rem;
+
+    .contenedor-footer {
+        padding-top: calc(v.$separacion/2);
+    }
+
+    .navegacion {
+        visibility: visible;
+        opacity: 1;
+        height: auto;
+    }
 
     .copyright {
         color: v.$blanco;
