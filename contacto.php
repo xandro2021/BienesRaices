@@ -3,7 +3,6 @@ require 'includes/funciones.php';
 incluirTemplate('header');
 ?>
 
-
     <main class="contenedor seccion">
         <h1>Contacto</h1>
 
