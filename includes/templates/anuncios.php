@@ -1,6 +1,5 @@
 <?php
 // Importar conexion -- require es relativo al documento o se usa la ruta relativa del documento que llama index.php
-require __DIR__ . '/../config/database.php';
 $db = conectarDB();
 
 // Consultar
