@@ -4,6 +4,8 @@ require 'funciones.php';
 require 'config/database.php';
 require __DIR__ . "/../vendor/autoload.php";
 
+// Conectarnos a la BD
 use App\Propiedad;
 
-$propiedad = new Propiedad;
+$db = conectarDB();
+Propiedad::setDB($db);
