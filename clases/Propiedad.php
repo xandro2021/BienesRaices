@@ -42,7 +42,7 @@ class Propiedad
         $this->estacionamiento = $args['estacionamiento'] ?? '';
         date_default_timezone_set('America/Costa_Rica');
         $this->creado = date('Y/m/d');
-        $this->vendedorId = $args['vendedorId'] ?? '';
+        $this->vendedorId = $args['vendedorId'] ?? 1;
     }
 
     public function guardar()
@@ -131,9 +131,48 @@ class Propiedad
         return self::$errores;
     }
 
-    public function setImagen($imagen) {
+    public function setImagen($imagen)
+    {
         if ($imagen) {
             $this->imagen = $imagen;
         }
+    }
+
+    public static function all()
+    {
+        $query = "SELECT * FROM Propiedades;";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
+    public static function consultarSQL($query)
+    {
+        // Consultar la base de datos
+        $resultado = self::$db->query($query);
+
+        // Iterar los resultados
+        $array = [];
+        while ($registro = $resultado->fetch_assoc()) {
+            $array[] = self::crearObjeto($registro);
+        }
+
+        // Liberar la memoria
+        $resultado->free();
+
+        // Retornar los resultados
+        return $array;
+    }
+
+    public static function crearObjeto($registro)
+    {
+        $objeto = new self;
+
+        foreach ($registro as $key => $value) {
+            if (property_exists($objeto, $key)) {
+                $objeto->$key = $value;
+            }
+        }
+
+        return $objeto;
     }
 }
