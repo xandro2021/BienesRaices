@@ -47,6 +47,17 @@ class Propiedad
 
     public function guardar()
     {
+        if (isset($this->id)) {
+            // Actualizar
+            $this->actualizar();
+        } else {
+            // Crear nuevo registro
+            $this->crear();
+        }
+    }
+
+    public function crear()
+    {
         // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
 
@@ -60,6 +71,31 @@ class Propiedad
         $resultado = self::$db->query($query);
 
         return $resultado;
+    }
+
+    public function actualizar()
+    {
+        // Sanitizar los datos
+        $atributos = $this->sanitizarAtributos();
+
+        $valores = [];
+
+        foreach ($atributos as $key => $value) {
+            $valores[] = "{$key}='{$value}'";
+        }
+
+        $query = "UPDATE Propiedades SET ";
+        $query .= join(', ', $valores);
+        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+        $query .= " LIMIT 1; ";
+
+        $resultado = self::$db->query($query);
+
+        if ($resultado) {
+            // redireccionar al usuario
+            // header solo funciona cuando no hay nada de html antes
+            header('Location: /admin?resultado=2');
+        }
     }
 
     // identificar y asociar las columnas de la DB
@@ -133,6 +169,19 @@ class Propiedad
 
     public function setImagen($imagen)
     {
+        // Elimina la imagen previa
+        // Si estamos editando entonces hay un id
+        if (isset($this->id)) {
+            // Comprobar si existe el archivo
+            $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+
+            // Eliminar el archivo si existe
+            if ($existeArchivo) {
+                unlink(CARPETA_IMAGENES . $this->imagen);
+            }
+        }
+
+        // Agregar o asignar nueva imagen
         if ($imagen) {
             $this->imagen = $imagen;
         }
@@ -143,6 +192,14 @@ class Propiedad
         $query = "SELECT * FROM Propiedades;";
         $resultado = self::consultarSQL($query);
         return $resultado;
+    }
+
+    public static function find($id)
+    {
+        $consultaPropiedad = "SELECT * FROM Propiedades WHERE id = {$id}";
+        $resultado = self::consultarSQL($consultaPropiedad);
+        // regreso al ultimo y unico elemento del arreglo
+        return array_shift($resultado);
     }
 
     public static function consultarSQL($query)
@@ -174,5 +231,16 @@ class Propiedad
         }
 
         return $objeto;
+    }
+
+    // Sincroniza el objeto en memoria con los cambios realizados por el usuario
+    public function sincronizar($args = [])
+    {
+
+        foreach ($args as $key => $value) {
+            if (property_exists($this, $key) && !is_null($value)) {
+                $this->$key = $value;
+            }
+        }
     }
 }

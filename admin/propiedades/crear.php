@@ -20,17 +20,17 @@ $errores = Propiedad::getErrores();
 // Ejecutar el codigo despues del que el usuario envia el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $propiedad = new Propiedad($_POST);
+    $propiedad = new Propiedad($_POST['propiedad']);
 
-    if ($_FILES['imagen']['tmp_name']) {
+    if ($_FILES['propiedad']['tmp_name']['imagen']) {
         // Generar un nombre unico
         $nombreImagen = uniqid('', true);
-        $extension = "." . pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
+        $extension = "." . pathinfo($_FILES['propiedad']['name']['imagen'], PATHINFO_EXTENSION);
         $nombreImagen .= $extension;
 
         $manager = new Image(Driver::class);
         // leer imagen
-        $imagen = $manager->read($_FILES['imagen']['tmp_name'])->cover(800, 600);
+        $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
         // guardo nombre de imagen
         $propiedad->setImagen($nombreImagen);
     }
