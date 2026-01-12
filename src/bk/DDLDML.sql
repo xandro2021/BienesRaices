@@ -1,1 +1,1 @@
-SELECT * FROM Propiedades p ;
+SELECT * FROM Vendedores v ;

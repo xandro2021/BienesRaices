@@ -2,17 +2,16 @@
 require '../../includes/app.php';
 
 use App\Propiedad;
+use App\Vendedor;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager as Image;
 
 estaAutenticado();
 
-$db = conectarDB();
-
 $propiedad = new Propiedad();
-// Consultar a los vendedores
-$consulta = 'SELECT * FROM Vendedores;';
-$resultado = mysqli_query($db, $consulta);
+
+// Consulta para obtener los vendedores
+$vendedores = Vendedor::all();
 
 // Arreglo con mensajes de errores
 $errores = Propiedad::getErrores();
@@ -37,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errores = $propiedad->validar();
 
+
     // Revisar que el arreglo de errores este vacío
     if (empty($errores)) {
 
@@ -49,13 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Guarda la imagen en el servidor
         $imagen->save(CARPETA_IMAGENES . $nombreImagen);
 
-        $resultadoInsert = $propiedad->guardar();
+        $propiedad->guardar();
 
-        if ($resultadoInsert) {
-            // redireccionar al usuario
-            // header solo funciona cuando no hay nada de html antes
-            header('Location: /admin?resultado=1');
-        }
     }
 }
 
